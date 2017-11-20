@@ -22,6 +22,14 @@ function maximum(){
 
 let zoom = new Zoom(top_x, top_y, size);
 
+function zoomout(){
+    top_x -= size/2;
+    top_y -= size/2;
+    size *= 2;
+    zoom = new Zoom(top_x, top_y, size);
+    makeMandelbrot();
+    i =0;
+}
 
 function setup(){
     createCanvas(width+500, height+30);
@@ -31,6 +39,11 @@ function setup(){
     gSlider.position(width + 30, 50);
     bSlider = createSlider(0, 255, 255);
     bSlider.position(width + 30, 80);
+    buttonRefresh = createButton('Zoom Out');
+    buttonRefresh.position(width + 30, 110);
+    buttonRefresh.mousePressed(zoomout);
+
+
     buttonRefresh = createButton('Refresh');
     buttonRefresh.position(width + 30, 210);
     buttonRefresh.mousePressed(makeMandelbrot);
