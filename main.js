@@ -41,7 +41,7 @@ function setup(){
     buttonReset.mousePressed(reset);
 
 
-    buttonShare = createButton('Copy Sharable Link');
+    buttonShare = createButton('Copy Sharable Link for cuurent view');
     buttonShare.position(width + 30, 270);
     buttonShare.mousePressed(share);
     
