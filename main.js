@@ -96,7 +96,7 @@ function draw(){
     text(copied, width + 20, 300, 460, 90);
     text("By: Saurabh Gupta", 15, height+15, 460, 90);
     fill(200, 0, 0);
-    text("Click on the area to zoom in.", width + 20, 450, 460, 90);
+    text("Click on the area to zoom in. (Don't click multiple times in a row.)", width + 20, 450, 460, 90);
     textSize(55);
     fill(0);
     text("MANDELBROT", width + 20, 350, 460, 90);
