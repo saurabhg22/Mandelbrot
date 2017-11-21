@@ -224,3 +224,16 @@
 		transform: rotate(-214deg);
 	}
 }
+
+button{
+	display: inline-block;
+	background: #20a5af;
+	width: auto;
+	height: 28px;
+	color: #ffffff;
+	border-color: #20a5af;
+	box-shadow: 2px 2px 1px #888888;
+}
+button:hover{
+	background: #27c5e0;
+}

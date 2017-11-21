@@ -13,6 +13,7 @@ function getIterations(x, y){
 
 
 function makeMandelbrot(colorGrid, img, previmg, zoom, Color){
+    copied  = "";
     try{
         for(let h = 0; h < height; h++){
             for(let w = 0; w < width; w++){
@@ -105,6 +106,7 @@ function reset(){
 }
 
 function refresh(){
+    copied = "";
     try{
         for(let h = 0; h < height; h++){
             for(let w = 0; w < width; w++){

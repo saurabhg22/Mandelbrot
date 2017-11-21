@@ -23,12 +23,12 @@ function zoomout(){
     m_size *= 4;
     zoom = new Zoom(top_x, top_y, size);
     makeMandelbrot(colorGrid, img, previmg, zoom, Color);
-    document.getElementById("loading").style.display = "hidden";
+    document.getElementById("loading").style.display = "none";
 }
 
 function setup(){
     
-document.getElementById("loading").style.display =  "hidden";
+document.getElementById("loading").style.display =  "none";
     Color = color;
     createCanvas(width+500, height+30);
     img = createGraphics(width, height);
@@ -48,19 +48,19 @@ document.getElementById("loading").style.display =  "hidden";
 
 
     buttonRefresh = createButton('Refresh');
-    buttonRefresh.position(width + 30, 210);
+    buttonRefresh.position(width + 30, 220);
     buttonRefresh.mouseClicked(refresh);
     buttonRefresh.mousePressed(load);
 
 
     buttonReset = createButton('Reset');
-    buttonReset.position(width + 30, 240);
+    buttonReset.position(width + 30, 260);
     buttonReset.mouseClicked(reset);
     buttonReset.mousePressed(load);
 
 
     buttonShare = createButton('Copy Sharable Link of current view');
-    buttonShare.position(width + 30, 270);
+    buttonShare.position(width + 30, 300);
     buttonShare.mouseClicked(share);
     
 
@@ -93,7 +93,7 @@ function draw(){
     fill(0);
     text("Zoom: " + Math.round(4.0/zoom.size), width + 20, 150);
     text("C: (" + (zoom.top_x + zoom.size/2) + " + " + (zoom.top_y + zoom.size/2) + "i)", width + 20, 180);
-    text(copied, width + 20, 300, 460, 90);
+    text(copied, width + 20, 330, 460, 90);
     text("By: Saurabh Gupta", 15, height+15, 460, 90);
     fill(200, 0, 0);
     text("Click on the area to zoom in. (Don't click multiple times in a row.)", width + 20, 450, 460, 90);
@@ -131,6 +131,7 @@ function draw(){
 
 }
 function load(){
+    copied = "";
     document.getElementById("loading").style.display =  "block";
 }
 
