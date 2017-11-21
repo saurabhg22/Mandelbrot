@@ -1,14 +1,5 @@
 p5.disableFriendlyErrors = true;
 
-function preload(){
-    colorGrid = new Array(height);
-    iterGrid = new Array(height);
-    for(let i = 0; i < height; i++){
-        colorGrid[i] = new Array(width);
-        iterGrid[i] = new Array(width);
-    }
-}
-
 
 function maximum(){
     let mx = arguments[0];
@@ -20,43 +11,58 @@ function maximum(){
 }
 
 
-let zoom = new Zoom(top_x, top_y, size);
 
 function zoomout(){
-    top_x -= size/2;
-    top_y -= size/2;
-    size *= 2;
+    console.log("zooming")
+    zoomingout =true;
+    top_x -= 3*size/2;
+    top_y -=  3*size/2;
+    size *= 4;
+    m_top_x -= 3*m_size/2;
+    m_top_y -= 3*m_size/2;
+    m_size *= 4;
     zoom = new Zoom(top_x, top_y, size);
-    makeMandelbrot();
-    i =0;
+    makeMandelbrot(colorGrid, img, previmg, zoom, Color);
+    document.getElementById("loading").style.display = "hidden";
 }
 
 function setup(){
+    
+document.getElementById("loading").style.display =  "hidden";
+    Color = color;
     createCanvas(width+500, height+30);
+    img = createGraphics(width, height);
+    previmg = createGraphics(width, height);
+    img.loadPixels();
+    previmg.loadPixels();
     rSlider = createSlider(0, 255, 0);
     rSlider.position(width + 30, 20);
     gSlider = createSlider(0, 255, 255);
     gSlider.position(width + 30, 50);
     bSlider = createSlider(0, 255, 255);
     bSlider.position(width + 30, 80);
-    buttonRefresh = createButton('Zoom Out');
-    buttonRefresh.position(width + 30, 110);
-    buttonRefresh.mousePressed(zoomout);
+    buttonZoomout = createButton('Zoom Out');
+    buttonZoomout.position(width + 30, 110);
+    buttonZoomout.mouseClicked(zoomout);
+    buttonZoomout.mousePressed(load);
 
 
     buttonRefresh = createButton('Refresh');
     buttonRefresh.position(width + 30, 210);
-    buttonRefresh.mousePressed(makeMandelbrot);
+    buttonRefresh.mouseClicked(refresh);
+    buttonRefresh.mousePressed(load);
 
 
     buttonReset = createButton('Reset');
     buttonReset.position(width + 30, 240);
-    buttonReset.mousePressed(reset);
+    buttonReset.mouseClicked(reset);
+    buttonReset.mousePressed(load);
 
 
-    buttonShare = createButton('Copy Sharable Link for current view');
+    buttonShare = createButton('Copy Sharable Link of current view');
     buttonShare.position(width + 30, 270);
-    buttonShare.mousePressed(share);
+    buttonShare.mouseClicked(share);
+    buttonShare.mousePressed(load);
     
 
 
@@ -64,9 +70,13 @@ function setup(){
     greenFactor = gSlider.value()/256;
     blueFactor = bSlider.value()/256;
     fill(0);
+    loaded = true;
     reset();
 }
 
+
+
+let count = 0;
 function draw(){
     noStroke();
     fill(255);
@@ -87,7 +97,7 @@ function draw(){
     text(copied, width + 20, 300, 460, 90);
     text("By: Saurabh Gupta", 15, height+15, 460, 90);
     fill(200, 0, 0);
-    text("Select the area with mouse to zoom in.", width + 20, 450, 460, 90);
+    text("Click on the area to zoom in.", width + 20, 450, 460, 90);
     textSize(55);
     fill(0);
     text("MANDELBROT", width + 20, 350, 460, 90);
@@ -95,79 +105,61 @@ function draw(){
     redFactor = rSlider.value()/256;
     greenFactor = gSlider.value()/256;
     blueFactor = bSlider.value()/256;
-    if(i == height){
-        i = 0;
-    }
-    for(let j = 0; j < width; j++){
-        stroke(colorGrid[i][j][0], colorGrid[i][j][1], colorGrid[i][j][2]);
-        point(j, i);
-    }
-    i++;
-}
-function reset(){
-    copied = "";
-    background(255);
-    top_x = Number(getParameterByName("x") || -2);
-    if(getParameterByName("x") === "0"){
-        top_x = 0;
-    }
-    top_y = Number(getParameterByName("y") || -2);
-    if(getParameterByName("y") === "0"){
-        top_y = 0;
-    }
-    m_top_x = 0;
-    m_top_y = 0;
-    size = Number(getParameterByName("s") || 4);
-    m_size = 600;
-    rSlider.value(Math.floor(Number(getParameterByName("r")*256 || 0)));
-    if(getParameterByName("r") === "0"){
-        rSlider.value(0);
-    }
-    gSlider.value(Math.floor(Number(getParameterByName("g")*256 || 255)));
-    if(getParameterByName("g") === "0"){
-        gSlider.value(0);
-    }
-    bSlider.value(Math.floor(Number(getParameterByName("b")*256 || 255)));
-    if(getParameterByName("b") === "0"){
-        bSlider.value(0);
-    }
-    zoom = new Zoom(top_x, top_y, size);
-    i = 0;
-    redFactor = rSlider.value()/256;
-    greenFactor = gSlider.value()/256;
-    blueFactor = bSlider.value()/256;
-    makeMandelbrot();
-}
-function mouseDragged(){
-    if(mouseX <= 0 || mouseX >= width || mouseY <= 0 || mouseY >= height) return;
-
-    if(!dragging){
-        m_top_x = mouseX;
-        m_top_y = mouseY;
-        dragging = true;
-    }
-    else{
-        let tmp = m_size;
-        m_size = maximum(mouseX - m_top_x, mouseY - m_top_y);
-        if(m_size > tmp){
-            stroke(255, 0, 0);
-            fill(100, 100, 100);
-            rect(m_top_x, m_top_y, m_size, m_size);
+    if(working && count < 100){
+        if(!zoomingout){
+            image(previmg, 0, 0, width, height, floor(m_top_x), floor(m_top_y), floor(m_size), floor(m_size));
+            count++;
+            m_top_x = map(count, 0, 100, 0, tmp_m_top_x);
+            m_top_y = map(count, 0, 100, 0, tmp_m_top_y);
+            m_size = map(count, 0, 100, 600, tmp_m_size);
+        }
+        else{
+            image(img, 0, 0, width, height, floor(m_top_x), floor(m_top_y), floor(m_size), floor(m_size));
+            count++;
+            m_top_x = map(count, 0, 100, 225, 0);
+            m_top_y = map(count, 0, 100, 225, 0);
+            m_size = map(count, 0, 100, 150, 600);
+            
         }
     }
+    else{
+        count = 0;
+        image(img, 0, 0, width, height);
+        working = false;
+        zoomingout = false;
+    }
+
+
+}
+function load(){
+    document.getElementById("loading").style.display =  "block";
 }
 
-function mouseReleased(){
+function mousePressed(){
     if(mouseX <= 0 || mouseX >= width || mouseY <= 0 || mouseY >= height) return;
-    i=0;
-    dragging = false;
+    document.getElementById("loading").style.display =  "block";
+
+}
+
+function mouseClicked(){
+    if(mouseX <= 0 || mouseX >= width || mouseY <= 0 || mouseY >= height) return;
+
+    m_size = 50;
+    m_top_x = mouseX - m_size/2;
+    m_top_y = mouseY - m_size/2;
+    tmp_m_top_x = m_top_x;
+    tmp_m_top_y = m_top_y;
+    tmp_m_size = m_size;
+
+
     top_x = top_x + m_top_x * zoom.size / width;
     top_y = top_y + m_top_y * zoom.size / height;
     size = m_size * zoom.size / width;
     zoom = new Zoom(top_x, top_y, size);
-    makeMandelbrot();
+    working = true;
+    makeMandelbrot(colorGrid, img, previmg, zoom, Color);
+    document.getElementById("loading").style.display =  "none";
 }
-
 
 function createHash(){
     let hash = "";

@@ -5,11 +5,12 @@
         <meta name="description" content="Explore deep zoom into Mandelbrot and share what you see.">
         <meta name="author" content="Saurabh Gupta">
         <meta name="keywords" content="Mandelbrot, Saurabh, Fractal, Zoom, Julia">
+        <link rel="stylesheet" type="text/css" href="style.css">
         <script type="text/javascript" src="p5/p5.js"></script>
         <script type="text/javascript" src="p5/p5.dom.js"></script>
+        <script type="text/javascript" src="zoom.js"></script>
         <script type="text/javascript" src="utility.js"></script>
         <script type="text/javascript" src="complex.js"></script>
-        <script type="text/javascript" src="zoom.js"></script>
         <script type="text/javascript" src="mandelbrot.js"></script>
         <script type="text/javascript" src="main.js"></script>
     </head>
@@ -18,5 +19,30 @@
         <p id="link" style="display:block; position:absolute; top: 620; width:400">
             <textarea style="display:block; position:fixed; top: -620; width:400" class="js-copytextarea" style="display:hidden;"></textarea>
         </p>
+        <div id="loading" class="cssload-cssload-wrap2" style="display:block; position:absolute; top: 500; left:540; width:400">
+            <div class="cssload-wrap">
+                <div class="cssload-overlay"></div>
+        
+                <div class="cssload-cogWheel cssload-one">
+                <div class="cssload-cog cssload-one"></div>
+                <div class="cssload-cog cssload-two"></div>
+                <div class="cssload-cog cssload-three"></div>
+                <div class="cssload-cog cssload-four"></div>
+                <div class="cssload-cog cssload-five"></div>
+                <div class="cssload-center"></div>
+                </div>
+        
+                <div class="cssload-cogWheel cssload-two">
+                <div class="cssload-cog cssload-one"></div>
+                <div class="cssload-cog cssload-two"></div>
+                <div class="cssload-cog cssload-three"></div>
+                <div class="cssload-cog cssload-four"></div>
+                <div class="cssload-cog cssload-five"></div>
+                <div class="cssload-center"></div>
+                </div>
+            </div>
+        </div>
+
+        
     </body>
 </html>

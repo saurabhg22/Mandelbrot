@@ -12,7 +12,20 @@ let width = 600, height = 600;
 let colorGrid, iterGrid;
 let i = 0;
 let copied = "";
+let img, previmg;
+let Color, zoom = new Zoom(top_x, top_y, size);
+let working = false, zoomingout = false;
+let buttonReset, buttonRefresh, buttonZoomout, buttonShare;
+let tmp_m_top_x=m_top_x, tmp_m_top_y=m_top_y, tmp_m_size=m_size;
+let loaded = false;
+let  histogram;
 
+colorGrid = new Array(height);
+iterGrid = new Array(height);
+for(let i = 0; i < height; i++){
+    colorGrid[i] = new Array(width);
+    iterGrid[i] = new Array(width);
+}
 function getParameterByName(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, "\\$&");
