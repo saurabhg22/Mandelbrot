@@ -62,7 +62,6 @@ document.getElementById("loading").style.display =  "hidden";
     buttonShare = createButton('Copy Sharable Link of current view');
     buttonShare.position(width + 30, 270);
     buttonShare.mouseClicked(share);
-    buttonShare.mousePressed(load);
     
 
 
